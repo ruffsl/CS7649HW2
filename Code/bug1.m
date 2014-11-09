@@ -1,7 +1,12 @@
 close all;
 
+set(0,'defaultLineLineWidth',2);   % set the default line width to lw
+set(0, 'defaultLineLineWidth', 2);
+set(0,'DefaultFigureWindowStyle','normal');
+
+
 %Domain
-domain1
+domain2
 
 %Config
 step_size = 0.5;
@@ -35,7 +40,7 @@ while (~reached)
     
     % change the end location
     theta = atan((goal(2) - current_location(2))/(goal(1) - current_location(1)));
-    if(goal(2) < current_location(2) && goal(1) < current_location(1))
+    if(goal(1) < current_location(1))
         theta = pi + theta;
     end
     
@@ -98,7 +103,7 @@ while (~reached)
             
     
             theta = atan((goal(2) - end_location(2))/(goal(1) - end_location(1)));
-            if(goal(2) < end_location(2) && goal(1) < end_location(1))
+            if(goal(1) < end_location(1))
                 theta = theta + pi;
             end
             

@@ -1,7 +1,11 @@
 close all;
 
+set(0,'defaultLineLineWidth',2);   % set the default line width to lw
+set(0, 'defaultLineLineWidth', 2);
+set(0,'DefaultFigureWindowStyle','normal');
+
 %Domain
-domain1
+domain2
 
 %Config
 step_size = 0.5;
@@ -24,15 +28,8 @@ pause(0.3);
 traj_X = [];
 traj_Y = [];
 
-%M-line
-line = [init', goal'];
-mx = []; %M-Line X
-my = []; %M-Line Y;
-for i = 1:numel(obstacles)
-    [xi, yi] = polyxpoly(line(1,:), line(2,:), obstacles{i}.X, obstacles{i}.Y);
-    mx = [mx, xi'];
-    my = [my, yi'];
-end
+
+
 
 plot(mx, my, '-or');
 
@@ -40,6 +37,7 @@ plot(mx, my, '-or');
  min_dist = bitmax;
  min_index = -1;
  break_it = 0;
+ first = 1;
 %Bug1 algorithm
 while (~reached)    
     
@@ -51,7 +49,7 @@ while (~reached)
     
     % change the end location
     theta = atan((goal(2) - current_location(2))/(goal(1) - current_location(1)));
-    if(goal(2) < current_location(2) && goal(1) < current_location(1))
+    if(goal(1) < current_location(1))
         theta = pi + theta;
     end
     
@@ -73,15 +71,23 @@ while (~reached)
             % start circumnavigating - always increase the indices -- check
             % when you hit the M-line
             for j = 1:num_elements
-                index = mod(index-1, num_elements)+1
+                index = mod(index-1, num_elements)+1;
                 traj_X = [traj_X, obstacles{i}.X(index)];
                 traj_Y = [traj_Y, obstacles{i}.Y(index)];                
-                next_index = mod(index, num_elements)+1
+                next_index = mod(index, num_elements)+1;
               
-                mline_index = find_between(obstacles{i}, index, next_index, mx, my)
-                pause(0.1);
+                mline_index = find_between(obstacles{i}, index, next_index, mx, my);
+                
                 if mline_index ~= -1
-                    input('mline_index is not -1');
+                    mline_index
+                    if mod(mline_index,2) == 1
+                        %input(' ');
+                        index = index + 1;
+                        first = 0;
+                        continue;
+                    end
+                    
+
                     % see if it is closer to the goal
                     dist_to_goal = (goal(1)-mx(mline_index))*(goal(1)-mx(mline_index)) + (goal(2)-my(mline_index))*(goal(2)-my(mline_index));
                     if(dist_to_goal < min_dist)
@@ -90,6 +96,7 @@ while (~reached)
                         traj_Y = [traj_Y, my(mline_index)];                               
                         end_location = [mx(mline_index), my(mline_index)];
                         break_it = 1;
+                        first = 1;
                         break;
                     end
                 end               
@@ -100,9 +107,8 @@ while (~reached)
                 index = index+1;
             end
             
-            input(' ');
             theta = atan((goal(2) - end_location(2))/(goal(1) - end_location(1)));
-            if(goal(2) < end_location(2) && goal(1) < end_location(1))
+            if(goal(1) < end_location(1))
                 theta = theta + pi;
             end
             

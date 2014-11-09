@@ -16,12 +16,15 @@ if end_y < start_y
 end    
     
 ret_index = -1;
+start_x = start_x - 0.0001;
+end_x = end_x + 0.0001;
+start_y = start_y - 0.0001;
+end_y = end_y + 0.0001;
 
 for i = 1:numel(mx)   
-    
-    if(mx(i) >= start_x && mx(i) <= end_x && my(i) >= start_y  && my(i) <=end_y)
-        ret_index = i
-        input(' ');
+ 
+    if(mx(i) >= start_x && mx(i) <= end_x && my(i) >= start_y  && my(i) <= end_y )
+        ret_index = i;
         break;
     end
 end
