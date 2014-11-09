@@ -29,6 +29,12 @@ pause(0.3);
 traj_X = [];
 traj_Y = [];
 
+%Video Object
+vidObj = VideoWriter('bug1_domain2.avi');
+vidObj.Quality = 100;
+vidObj.FrameRate = 10;
+open(vidObj);
+
 %Bug1 algorithm
 while (~reached)    
     
@@ -76,6 +82,7 @@ while (~reached)
                 figure(fig);
                 hold on;
                 plot(traj_X, traj_Y);
+                writeVideo(vidObj, getframe(gca));
                 index = index+1;
             end
             
@@ -90,6 +97,7 @@ while (~reached)
                 figure(fig);
                 hold on;
                 plot(traj_X, traj_Y);
+                writeVideo(vidObj, getframe(gca));
 
                 end_location = [obstacles{i}.X(index), obstacles{i}.Y(index)];
                 
@@ -125,14 +133,30 @@ while (~reached)
     current_location = end_location;
     traj_X = [traj_X, current_location(1)];
     traj_Y = [traj_Y, current_location(2)];
-    
+
     
     % draw the figure
     figure(fig);
     hold on;
     plot(traj_X, traj_Y);
+    writeVideo(vidObj, getframe(gca));
         
 end
+
+
+%Close video object
+close(vidObj);
+
         
+
+% Statistics
+euclidean_dist = sqrt((goal(1)-init(1))*(goal(1)-init(1)) + (goal(2)-init(2))*(goal(2)-init(2)));
+euclidean_dist = euclidean_dist/step_size;
+
+actual_dist = numel(traj_X);
+
+fprintf('Actual Distance: %f\nEuclidean Distance: %f\nCR: %f\n', actual_dist, euclidean_dist, actual_dist/euclidean_dist);
+
+    
     
     
