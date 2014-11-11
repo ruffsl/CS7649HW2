@@ -12,10 +12,11 @@ Repository of Team#3 for HW2
   * `sudo apt-get install ipython`
 * [ipython Notebook](http://ipython.org/notebook.html)
   * `sudo apt-get install ipython-notebook`
+* [scipy](http://www.scipy.org/)
+  * `sudo apt-get install python-scipy`
 
-## C++
-* [boost](http://www.boost.org/)
-  * `sudo apt-get install libboost-all-dev`
+## Matlab
+* [R2014b](http://www.mathworks.com/products/matlab/)
 
 # How to
 * View the notebook
