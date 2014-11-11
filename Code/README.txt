@@ -1,0 +1,1 @@
+How to run code for Problem 2.  In Code/ directory, run each section of Problem2.m individually.  The first section finds the solution to Part a, the second section find the solution to Part b, and the Extra section runs the field with 30 random obstacles.
