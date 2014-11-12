@@ -542,36 +542,36 @@ scene1.txt for obstacle info). In this case, no video for arm motion is
 needed.
 \end{quote}
 
-    We started by importing some of our code used to define our 3 DOF robot
-arm, the scene geometry, our RRT algorithm, as well as plotting tools
-for rendering resulting tree structures and trajectories. Note that for
+    We start by importing our code which defines our 3 DOF robot arm, the
+scene geometry, our RRT algorithm, as well as plotting tools for
+rendering the resulting tree structures and trajectories. Note that
 Scene 1 is corrected to be similar to Scene 2, otherwise the start joint
 state specified, $q_s = (0.14, 1.45, 1.0)$, would place a portion of the
 arm inside the obstacle.
 
 
-    For our first RRT algorithem, we'll begin with a basic baseline approch,
-i.e.~without any goal bias, connect methods or multiple exploring trees.
-The RRT is first seeded at the starting configuration, $q_{start}$, in
-joint space and expands toward a random sample, $q_{rand}$, drawn
-uniformly from the joint space, and extended from the nearest node on
-the tree, $q_{near}$ to valid $q_{new}$ by a distance of a given
-$\delta$ in the direction of $q_{rand}$.
+    For our first RRT algorithm, we'll begin with a basic baseline approach,
+without any goal bias, connect methods or multiple exploring trees. The
+RRT is first seeded at the starting configuration, $q_{start}$, in joint
+space and expanded towards a random sample, $q_{rand}$, drawn uniformly
+from the joint space, and extended from the nearest node on the tree,
+$q_{near}$ to a valid $q_{new}$ by a distance of a given $\delta$ in the
+direction of $q_{rand}$.
 
 For our purposes here, we'll define our $q_{new}$ points to be valid
 using a simple collision detection method. This is done by subsampling
 points along the joints and lengths of the arm, 5 points per length in
 this case, and looping through each subsample with each obstacle in the
 workspace. This may result in small overlaps in the arm model with
-corners of obstacles. This could be improved by using line and polygon
-intersection formulas or KD trees defining collision boundries, but in
-the intrest of simplicty and speed, as python is a scripting language,
+corners of obstacles. This can be improved by using line and polygon
+intersection formulas or KD trees defining collision boundaries, but in
+the interest of simplicity and speed, as python is a scripting language,
 we'll opt for a basic subsampling collision check.
 
 Also, as it is highly improbable that we happen to chose a $q_{new}$
 that lands exactly on our goal state, we'll broaden our goal to a region
-within a given tolerance in our jointspace, for here we'll be using
-$\pm 10\,^{\circ}$ in our sum joint configuation with the goal state to
+within a given tolerance in our joint space, for here we'll be using
+$\pm 10\,^{\circ}$ in our sum joint configuration with the goal state to
 be our goal region. We will remove this relaxation when we gain a goal
 bias behavior.
 
@@ -585,12 +585,12 @@ bias behavior.
 ('success: ', False)
     \end{Verbatim}
 
-    So we see that after $1000$ iterations we didn't get close enough to the
+    We see that after $1000$ iterations we didn't get close enough to the
 goal region. However, let's take a look at the resulting RRT. In the
 figures below we can see the joint space for all three DOF in the 3D
 axes plot, with the the range of each axes spanning over the region
-$\{-\pi,\pi\}$. We can see here that scene devoid of obstacles, our RRT
-grows uniformaly into the void of the joint space.
+$\{-\pi,\pi\}$. We can see here that with the scene devoid of obstacles,
+our RRT grows uniformly into the void of the joint space.
 
 
 
@@ -604,14 +604,14 @@ grows uniformaly into the void of the joint space.
     { \hspace*{\fill} \\}
     
     Now lets take a look at the resulting trajectory. Our RRT did not have a
-suffecient number of allowable iterations to reach our desired goal
+sufficient number of allowable iterations to reach our desired goal
 region, but let's check how close it got. We can do this by using the
-path to the node on the current tree that grew closest to the goal
-instead. You may also have noticed that the arm attempts the long way
-arround to the goal state, i.e.~in a clockways manner. This is due to
-the absence of wrapping in our joint space, this lack of wrapping joint
-angels however more closly aligns with the physical limatations to which
-most robot arms are constrianed.
+path to the node on the current tree that grew closest to the goal. You
+may also have noticed that the arm attempted the long way around to the
+goal state, i.e.~in a clockwise manner. This is due to the absence of
+wrapping in our joint space, this lack of wrapping joint angles,
+however, more closely aligns with the physical limitations to which most
+robot arms are constrained.
 
 
             \begin{Verbatim}[commandchars=\\\{\}]
@@ -623,14 +623,14 @@ most robot arms are constrianed.
     \end{center}
     { \hspace*{\fill} \\}
     
-    It looks like after $1000$ iterations, the basline did get us a close.
+    It looks like after $1000$ iterations, the baseline did get us a close.
 We can see the jerk in the arms movements resulting from the discrete
 deltas we grew our tree with. We could smooth our motions by utilizing a
-smaller growth delta, or using a spline curve. But this will add to the
-search time of our RRT. And with a just a simple basline method, this
-naive way of sampling is a lengthy procedure already. Let's try our
-basline with some other scene types, but with $\times 5$ as many allowed
-iterations as before.
+smaller growth delta, or using a spline curve. But this would increase
+the search time of our RRT. And with a just a simple baseline method,
+this naive way of sampling is a lengthy procedure already. Let's try our
+baseline with some other scene types, but with $\times 5$ as many
+allowed iterations as before.
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -643,13 +643,13 @@ iterations as before.
     \end{Verbatim}
 
     Even with $5000$ iterations we were not able to reach our goal. In the
-figures below we'll see how the gowth of the tree has changed. Ideally
-the tree grows larger, as the number of iteration was incresed, but
-there are now regions within the joint space that are no longer
-explored, such as the $\theta0 > 0 rad$. This is due to how the obstacle
-in scene 1 now projects itself into the joint space, as the first joint,
-or the sholder of the arm can no longer move into the upper two
-quadrents of the workspace due to collisions with the rectangle.
+figures below we'll see how the growth of the tree has changed. Ideally
+the tree grows larger, as the number of iteration increased, but there
+are now regions within the joint space that are no longer explored, such
+as the $\theta0 > 0 rad$. This is due to how the obstacle in scene 1
+which now projects into the joint space, as the first joint or shoulder
+of the arm can no longer move into the upper two quadrants of the
+workspace due to collisions with the rectangle.
 
 
 
@@ -663,9 +663,10 @@ quadrents of the workspace due to collisions with the rectangle.
     { \hspace*{\fill} \\}
     
     Let's take a look at the resulting trajectory. We see there is a bit of
-an oscillation as we narrow down the ends of tree to the goal region.
-This is because by the time the tree encountered the goal region, it had
-already gained a dense number of branches around the same voronoi cell.
+an oscillation as we narrow down the ends of the tree to the goal
+region. This is because by the time the tree encountered the goal
+region, it had already gained a dense number of branches around the same
+voronoi cell.
 
 
             \begin{Verbatim}[commandchars=\\\{\}]
@@ -689,7 +690,7 @@ already gained a dense number of branches around the same voronoi cell.
 ('success: ', False)
     \end{Verbatim}
 
-    We see that due to the additional obstcales, our tree has been hollowed
+    We see that due to the additional obstacles, our tree has been hollowed
 out some more and has been confined to a tighter volume in the joint
 space.
 
@@ -704,7 +705,7 @@ space.
     \end{center}
     { \hspace*{\fill} \\}
     
-    In the resulting trajectory we again see the violent oscillations as our
+    In the resulting trajectory we again see violent oscillations as our
 naive sampling jumps around our goal sporadically, and in fact it never
 converges with the limited number of iterations.
 
@@ -735,7 +736,7 @@ the same baseline approach as before, but we'll adjust things in two
 ways. First we'll add in a $5\%$ chance that a generated target sample
 is in fact the goal state. With the previous change now implemented, we
 can remove the need for a tolerance, and can change our goal state to be
-instaed when one of our extended nodes does reach the exact goal state.
+instead when one of our extended nodes does reach the exact goal state.
 
 
 
@@ -769,9 +770,6 @@ instaed when one of our extended nodes does reach the exact goal state.
     { \hspace*{\fill} \\}
     
 
-
-
-
     \begin{Verbatim}[commandchars=\\\{\}]
 ('start: ', array([ 0.14,  1.45,  1.  ]))
 ('goal: ', array([-2.5, -0.5, -2.1]))
@@ -782,7 +780,7 @@ instaed when one of our extended nodes does reach the exact goal state.
 
     For scene 1, we can see that this has greatly reduced the number of
 nodes needed to expand, which is nice from a performance perspective for
-scenes that are not entirely detremental for greedy approaches.
+scenes that are not entirely detrimental for greedy approaches.
 
 
 
@@ -791,12 +789,12 @@ scenes that are not entirely detremental for greedy approaches.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_87_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_84_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     We can see now that the trajectory is now much shorter and rather
-reasonable in behavor while exactly reaching our target goal state.
+reasonably behaved while exactly reaching our target goal state.
 
 
             \begin{Verbatim}[commandchars=\\\{\}]
@@ -804,7 +802,7 @@ reasonable in behavor while exactly reaching our target goal state.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_89_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_86_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -832,13 +830,13 @@ space.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_94_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_91_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    In the final trajectory we can see how the arm make steady progress to
-the goal with minimal backtracking thanks to the small amount of bias
-towards the goal.
+    In the final trajectory, we can see how the arm makes steadily
+progresses to the goal with minimal backtracking thanks to the small
+amount of bias towards the goal.
 
 
             \begin{Verbatim}[commandchars=\\\{\}]
@@ -846,7 +844,7 @@ towards the goal.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_96_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_93_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -860,14 +858,14 @@ Use the same start/goal configurations(as in (b)) and try for both
 without and with obstacle cases(see scene2.txt for obstacle info.)
 \end{quote}
 
-    Now let's add a new capability for our evolving RRT, that is the
-connecting. This approach will build on our progress with goal-biased
-sampling, but will add a connecting method for even more rapid
-expansion. This is done here by sampling a $/q_{rand}$ and finding a
-$q_{near}$ just like before, only now extending towards $/q_{rand}$ as
-many times as we can before colliding with an obstacle. In practice, we
-can just devide the distance to $q_{rand}$ from $q_{near}$ and looping
-over the delta points in-between untill we collide or reach the sample.
+    Now let's add a new capability for our evolving RRT, that is by using
+the connect. This approach will build on our progress with goal-biased
+sampling, but will add a connect method for even more rapid expansion.
+This is done here by sampling a $/q_{rand}$ and finding a $q_{near}$
+just like before, only now extending towards $/q_{rand}$ as many times
+as we can before colliding with an obstacle. In practice, we can just
+divide the distance to $q_{rand}$ from $q_{near}$ and looping over the
+delta points in-between until we collide or reach the sample.
 
 
 
@@ -886,7 +884,7 @@ over the delta points in-between untill we collide or reach the sample.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_103_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_100_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -896,7 +894,7 @@ over the delta points in-between untill we collide or reach the sample.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_104_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_101_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -909,8 +907,8 @@ over the delta points in-between untill we collide or reach the sample.
 ('success: ', True)
     \end{Verbatim}
 
-    That was quick! Let's take a look at the resulting tree stucture. We can
-see the straght line in the state space resulting from the new
+    That was quick! Let's take a look at the resulting tree structure. We
+can see the straight line in the state space resulting from the new
 connecting behavior.
 
 
@@ -920,22 +918,21 @@ connecting behavior.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_108_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_105_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    The arm's trajectory and motion behavior of the arm has now changed
-again.
+    The arm's trajectory and motion behavior have now changed again.
 
 First we notice how the straight lines in the joint space generated by
-the connecting method has resulted in continuous- like joint velocities,
+the connecting method have resulted in continuous-like joint velocities,
 smoothing the arms motion aside from the moments when the arm changes
 directions in the joint space.
 
 The second thing we see is how the arm now tends to bounce around
-obstacles, as the connect-like startegy now only changes tarjectory when
-it reaches the selected $q_{rand}$ sample, or more often encounters a
-collision in the next $\delta$ direction.
+obstacles, as the connect-like strategy now only changes trajectory when
+it reaches the selected $q_{rand}$ sample, or, as if more often the
+case, encounters a collision in the next $\delta$ direction.
 
 
             \begin{Verbatim}[commandchars=\\\{\}]
@@ -943,7 +940,7 @@ collision in the next $\delta$ direction.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_110_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_107_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -963,7 +960,7 @@ without and with obstacle cases(see scene2.txt for obstacle info.)
     Alright, let's add in one last extension to our RRT, bidirectional
 growth! We'll start with two trees, one at the goal and one at the start
 state. We then toggle between the tree we are extending from the start
-state and the tree being extended from the foal. This alone, however,
+state and the tree being extended from the goal. This alone, however,
 would still just be a very greedy algorithm, so we limit the probability
 to sampling the non-currently expanding tree instead of the whole joint
 space to $5\%$, like with did with our goal bias before.
@@ -986,7 +983,7 @@ space to $5\%$, like with did with our goal bias before.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_118_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_115_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -996,7 +993,7 @@ space to $5\%$, like with did with our goal bias before.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_119_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_116_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1009,8 +1006,8 @@ space to $5\%$, like with did with our goal bias before.
 ('success: ', True)
     \end{Verbatim}
 
-    Hmm\ldots{} with the Bidirectional RRT using connect, it seem to be a
-bit of a hit or miss scenario. I've witnesed the search time vary
+    Hmm\ldots{} with the bidirectional RRT using connect, it seem to be a
+bit of a hit or miss scenario. I've witnessed the search time vary
 drastically: for this same start and goal it may only take about 600
 iterations, while other times it might be much slower, as this
 hairy-looking intersection of two growing trees shows.
@@ -1023,7 +1020,7 @@ hairy-looking intersection of two growing trees shows.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_124_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_121_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1032,8 +1029,8 @@ performance in completeness, this approach finds a solution well under
 the maximum limit of iterations, but sometimes misses in optimality. In
 a few instances it appears that by the time the two trees intersect,
 there already exists a good deal of exploration overlap. This can result
-in a bit of backtracing in trajectory as paths through the joint space
-jostle around the voronoi region overlaped by the two trees before
+in a bit of backtracking in trajectory as paths through the joint space
+jostle around the voronoi region overlapped by the two trees before
 moving towards the root of the other tree. By tuning the biases, we
 could make the bidirectional search a bit more greedy and lessen the
 chance of a stagnant overlapping.
@@ -1044,7 +1041,7 @@ chance of a stagnant overlapping.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_126_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_123_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1073,35 +1070,35 @@ think played the most important role in the outcomes and why.
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_131_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_128_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    In the figure above we see the mean number of iterations to reach the
-goal for each RRT approach as shown previously over $10$ trials. The
-whiskers are the standard deviations over the number of trials. For
-Scene 0, that was devoid of all obstacles, the trees were permitted to
-fully explore the entire joint space for the goal condition. For Scene
-0, we limited our baseline to $5000$ iterations, where an iteration
-considered to be an attempted to extension towards a sample point,
-whether successful or not.
+    In the figure above, we see the mean number of iterations needed to
+reach the goal for each RRT approach, as shown previously, over $10$
+trials. The whiskers are the standard deviations over the number of
+trials. For Scene 0, which was devoid of all obstacles, the trees were
+permitted to fully explore the entire joint space for the goal
+condition. For Scene 0, we limited our baseline to $5000$ iterations,
+and in iteration was considered to be an attempt to extend towards a
+sample point, whether successful or not.
 
 What can be shown is that the Goal Connect method was by far the most
 efficient in terms of number of iterations, with Goal Directed coming in
 second, Bidirectional Connect third, and Baseline in last. Here the
-Baseline appears to max out consistently over 1000 iterations, most
-likely never satisfying our goal criteria. The rest of the methods that
-happen to use a goal bias for sampling appear to do much better. The
-Goal Connect offers a excellent combination for greed search and rapid
-growth to the goal, while Goal Directed lacks this connect capability
-and must more slowly expand into the joint space.
+Baseline approach appears to max out consistently over 1000 iterations,
+most likely never satisfying our goal criteria. The rest of the methods
+that happen to use a goal bias for sampling appear to do much better.
+The Goal Connect offers an excellent combination for greedy search and
+rapid growth to the goal, while Goal Directed lacks this connect
+capability and must expand more slowly into the joint space.
 
 For Bidirectional Connect, we see the addition of a second tree has done
 less to improve iteration count. This is most likely due to the fact
 that the probability of one tree extending and connecting to a second
 random node on the second tree given a $5\%$ is less probable that
 growing towards a static goal with the same about of bias. This
-distribution of performance also seem to be more wide spread.
+distribution of performance also seems to be more wide spread.
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1115,17 +1112,17 @@ distribution of performance also seem to be more wide spread.
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_135_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_132_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    For the same results given the Scene 2, we see that now Bidirectional
-Connect has improved in comparison to Goal Directed, but still worse
-than Goal Connect. The obstacles in Scene 2 that volumetrically restrict
-the joint space help confine the growth of the Bidirectional Connect.
-With this increase in exploration density, this improves the probability
-that the two trees converge sooner when they fall in reach of each
-other.
+    For the same results given Scene 2, we see now that the Bidirectional
+Connect has improved in comparison to Goal Directed, but still performs
+worse than Goal Connect. The obstacles in Scene 2 that volumetrically
+restrict the joint space help confine the growth of the Bidirectional
+Connect. With this increase in exploration density, this improves the
+probability that the two trees will converge sooner when they fall in
+reach of each other.
 
 We should note that some of the main parameters, such as the $\delta$
 used for extension or the probability of the extent to goal bias could
@@ -1134,10 +1131,10 @@ encountered when radically changing these parameters however include:
 when the given delta is to small, the time required to densely explore
 the joint space increases inversely, while making the delta to large can
 result in impossible trajectories as the arm could discreetly teleport
-around surrounding obstacles. When tweaking the goal bais, we have to be
-careful, as increasing the bias to far can lead to suboptimal solutions
-or traps from local minimums, while keeping it so small more or less
-will get you the same nave and lengthy sampling as with the Baseline
+around surrounding obstacles. When tweaking the goal bias, we have to be
+careful, as increasing the bias too far can lead to suboptimal solutions
+or traps from local minimums, while keeping it too small more or less
+will get you the same naive and lengthy sampling as the Baseline
 approach.
 
 
@@ -1174,28 +1171,29 @@ the trees growing and the arm moving(upload the movies to your
 repository and include snapshots in your summary report.)
 \end{quote}
 
-    Lets start by importing our code for Constrained RRT with a Goal
-Directed bias. The task constraint will ensure our trajectory remains in
-bound with the specified limits, keeping the pose of the endefector
-along the line $y=3$ in the workspace. The goal bias will help ensure we
-latch onto our exact goal.
+    We started by importing our code for Constrained RRT with a Goal
+Directed bias. The task constraint will ensure that our trajectory
+remains bounded within the specified limits, keeping the pose of the end
+effector along the line $y=3$ in the workspace. The goal bias will help
+ensure we latch onto our exact goal.
 
-To do this we first pass our new $q_c$ sample to a new subroutine that
-calculates the error the workspace point $p_c$ with respect to the task
-constraint, i.e.~the difference in the endefector y displacement and the
-$y=3$ axis. This error is then scaled and multiplied by and vector of
-ones to produce $\dot{s}$ that is then multiplied with the inverse
-jacobian to gain $\dot{q} = J^{-1} \cdot \dot{s}$. Then we re-assign our
-$q_c$ such that $q_c = q_c - \dot{q}$ in order to move it back towards
-the constrained manifold. This is done iteratively until the error is
-below a $0.01$ threshold.
+To do this, we first pass our new $q_c$ sample to a new subroutine that
+calculates the error of the workspace point $p_c$ with respect to the
+task constraint, i.e.~the difference in the end effector's y
+displacement and the $y=3$ axis. This error is then scaled and
+multiplied by a vector of ones to produce $\dot{s}$ which is then
+multiplied with the inverse Jacobian to get
+$\dot{q} = J^{-1} \cdot \dot{s}$. Then we re-assign our $q_c$ such that
+$q_c = q_c - \dot{q}$ in order to move it back towards the constrained
+manifold. This is done iteratively until the error is below a $0.01$
+threshold.
 
-After this is done, we'll still need to do some filtering, as thanks to
-singularities with in the jacobian, we would otherwise accrue a large
-number of outliers well outside our original joint space. To do this we
+After this is done, we'll still need to do some filtering, thanks to
+singularities with in the Jacobian. We would otherwise accrue a large
+number of outliers well outside our original joint space. To do this, we
 simply check that the new corrected $q_c$ is no further that around 10
-times the chosen $\delta$ with respect the the original $q_near$ we were
-attempting to extend from.
+times the chosen $\delta$ with respect the the original $q_{near}$ we
+were attempting to extend from.
 
 
 
@@ -1215,7 +1213,7 @@ attempting to extend from.
     \end{Verbatim}
 
     Below we see the projected workspace constraint manifest as a curved
-manifold with in the 3 DOF joint space. For this case, in order to
+manifold within the 3 DOF joint space. For this case, in order to
 produce finer trajectories, we've reduced our delta from $10^\circ$ to
 just $1^\circ$. This will increase the number of required iterations,
 but should mitigate the jerking motions of the arm as it passed along
@@ -1228,7 +1226,7 @@ the $y=3$ task constraint.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_145_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_142_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1241,7 +1239,7 @@ mirrored refection of its original pose.
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_147_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{HW2_files/HW2_144_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1262,9 +1260,9 @@ Conference on. IEEE, 2012.
     \subsection{Participation}
 
 
-    For this problemset we've divded the work appropriately:\\Problem 1:
-Siddharth\\Problem 2: Yosef\\Problem 3: Varun\\Problem 4:
-Ruffin\\Problem 5: Ruffin \& Varun
+    For this problem set we've divided the work appropriately: Problem 1:
+Siddharth Problem 2: Yosef Problem 3: Varun Problem 4: Ruffin Problem 5:
+Ruffin \& Varun Editing: Yosef
 
 
     % Add a bibliography block to the postdoc
