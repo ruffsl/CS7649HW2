@@ -21,7 +21,7 @@ Repository of Team#3 for HW2
 # How to
 * View the notebook
  * You can view the notebook by simply using nbviewer render the .ipynb file in your browser
- * http://nbviewer.ipython.org/github/RIP2014/HW2_Team3/blob/master/Code/HW2.ipynb
+ * http://nbviewer.ipython.org/github/ruffsl/CS7649HW2/blob/master/Code/HW2.ipynb
 * Run the notebook
   * You open and run the notebook by launching a ipython kernel in the same directory as the HW3.ipynb
   * `$ cd Code/`
